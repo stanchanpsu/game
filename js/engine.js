@@ -6,9 +6,9 @@ $(document).ready(function(){
 });
 
 function slide(character, queue){
-    $(document).keypress(function(keypressed){
+    $(document).keyup(function(keypressed){
         var key = keypressed.which;
-        if (key == 97 && !queue){
+        if (key == 65 && !queue){
             queue = true;
             character.animate({width: '150px', height: '50px'}, 100).delay(500)
             .animate({width: '100px', height: '100px'}, 100);
@@ -21,7 +21,7 @@ function slide(character, queue){
 }
 
 function jump(character, queue){
-    $(document).keypress(function(keypressed){
+    $(document).keyup(function(keypressed){
         var key = keypressed.which;
         if (key == 32 && !queue){
             queue = true;
