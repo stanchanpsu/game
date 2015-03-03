@@ -11,6 +11,8 @@ $(document).ready(function(){
    jump($blockman, animatequeue);
    changecolor($blockman, colorqueue);
    generateblock();
+    scrollBackground();
+    
    setInterval(function(){
        $('div.jumpblock').each(function(){
        leftcollide($blockman, $(this));
@@ -39,7 +41,7 @@ function jump(character, queue){
         var key = keypressed.which;
         if (key == 38 && !queue){
             queue = true;
-            character.animate({bottom: '300px', height: '120px', width: '50px'}, 200).delay(300)
+            character.animate({bottom: '300px', height: '110px', width: '80px'}, 200).delay(300)
             .animate({bottom: '58px', height: '100px', width: '100px'}, 250);
             window.setTimeout(function(){queue = false}, 800);
         }
@@ -65,10 +67,10 @@ function changecolor(character, queue){
         }
         switch(color){
             case 0:
-                character.animate({backgroundColor: 'blue'}, {duration: 30, queue: false});
+                character.animate({backgroundColor: '#11edff'}, {duration: 30, queue: false});
                 break;
             case 1:
-                character.animate({backgroundColor: 'red'}, {duration: 30, queue: false});
+                character.animate({backgroundColor: '#8e00ac'}, {duration: 30, queue: false});
                 break;
             case 2:
                 character.animate({backgroundColor: 'yellow'}, {duration: 30, queue: false});
@@ -99,6 +101,14 @@ function leftcollide(elem1, elem2){
     
     
     if (bottomright1[0] > pos2.left && bottomright1[1] > pos2.top && bottomright1[0] < pos2.left + width2){
-        console.log("collision");
+//        console.log("collision");
     }
+}
+
+function scrollBackground(){
+    var x =0;
+    window.setInterval(function(){
+        $('#ground').css('backgroundPosition', x + 'px');
+        x-=5;
+    }, 10);
 }
