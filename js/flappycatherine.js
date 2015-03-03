@@ -2,13 +2,13 @@ var animatequeue;
 var colorqueue;
 var color = 0;
 var $body;
+var collision = false;
 
 
 $(document).ready(function(){
     var $blockman = $('#blockman');
-    $body = $('body');
-   slide($blockman, animatequeue);
-   jump($blockman, animatequeue);
+    var dfromground;
+   jump($blockman);
    changecolor($blockman, colorqueue);
    generateblock();
    setInterval(function(){
@@ -16,35 +16,29 @@ $(document).ready(function(){
        leftcollide($blockman, $(this));
         });
     }, 50);
+    setInterval(function(){
+        dfromground = $('#ground').position().top - ($blockman.position().top + $blockman.height());
+        $body = $('body');
+        if (dfromground  >  1 && !animatequeue){
+            $blockman.stop(true).animate({bottom: '-=7px'}, {duration: 1, queue: true, easing: 'linear'});
+        }
+        else if (dfromground <= 10){
+            $body.append($('<div>', {class: 'youlose'}));
+        }
+        else{
+            return;
+        }
+    }, 1);
 });
 
-function slide(character, queue){
-    $(document).keyup(function(keypressed){
-        var key = keypressed.which;
-        if (key == 40 && !queue){
-            queue = true;
-            character.animate({width: '120px', height: '50px'}, 100).delay(500)
-            .animate({width: '100px', height: '100px'}, 100);
-            window.setTimeout(function(){queue = false}, 800);
-            
-        }
-        else if(queue){
-            return;
-        }
-    });
-}
 
-function jump(character, queue){
+function jump(character){
     $(document).keyup(function(keypressed){
         var key = keypressed.which;
-        if (key == 38 && !queue){
-            queue = true;
-            character.animate({bottom: '300px', height: '120px', width: '50px'}, 200).delay(300)
-            .animate({bottom: '58px', height: '100px', width: '100px'}, 250);
-            window.setTimeout(function(){queue = false}, 800);
-        }
-        else if(queue){
-            return;
+        if (key == 38 && character.position().top > 0){
+            animatequeue = true;
+            character.animate({bottom: '+=150px', }, {duration: 300, queue: false, easing: 'easeOutCubic'}, window.setTimeout(function(){animatequeue = false}, 300));
+            
         }
     });
 }
@@ -99,6 +93,6 @@ function leftcollide(elem1, elem2){
     
     
     if (bottomright1[0] > pos2.left && bottomright1[1] > pos2.top && bottomright1[0] < pos2.left + width2){
-        console.log("collision");
+        collision = true;
     }
 }
