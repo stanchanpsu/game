@@ -2,11 +2,13 @@ var animatequeue;
 var colorqueue;
 var color = 0;
 var $body;
+var $game;
 
 
 $(document).ready(function(){
     var $blockman = $('#blockman');
     $body = $('body');
+    $game = $('#game');
    slide($blockman, animatequeue);
    jump($blockman, animatequeue);
    changecolor($blockman, colorqueue);
@@ -14,10 +16,10 @@ $(document).ready(function(){
     scrollBackground();
     
    setInterval(function(){
-       $('div.jumpblock').each(function(){
+       $('div.obstacle').each(function(){
        leftcollide($blockman, $(this));
         });
-    }, 50);
+    }, 150);
 });
 
 function slide(character, queue){
@@ -80,14 +82,26 @@ function changecolor(character, queue){
 }
 
 function generateblock(){
+    var ran;
+    var $jumpblock = $("<div>", {class: "obstacle jumpblock"});
+    var $slideblock = $("<div>", {class: "obstacle slideblock"});
+    
     setInterval(function(){
-        if (Math.random() > 0.3){
-            var $div = $("<div>", {class: "jumpblock"});
-            $body.append($div);
-            $div.css('right', '-200px').animate({right: '100vw'}, 3000, 'linear');
-            window.setTimeout(function(){$div.remove(0)}, 3000);
+        ran = Math.random();
+        if (ran < 0.33){
+            $game.append($jumpblock);
+            $jumpblock.css('right', '-200px').animate({right: '100vw'}, 3000, 'linear', function(){
+                $(this).remove();
+            });
         }
-    }, 1300+Math.random()*1000);
+        else if (0.67 > ran && ran > 0.33){
+            $game.append($slideblock);
+            $slideblock.css('right', '-200px').animate({right: '100vw'}, 3000, 'linear', function(){
+              $(this).remove();  
+            });
+        }
+
+    }, 800+Math.random()*1000);
 }
 
 function leftcollide(elem1, elem2){
@@ -101,7 +115,7 @@ function leftcollide(elem1, elem2){
     
     
     if (bottomright1[0] > pos2.left && bottomright1[1] > pos2.top && bottomright1[0] < pos2.left + width2){
-//        console.log("collision");
+        console.log("collision");
     }
 }
 
