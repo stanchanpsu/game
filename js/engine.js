@@ -170,34 +170,6 @@ function ranColor(){
 	}
 }
 
-//function Gravity(thing){
-//	var fallAccel = 1;
-//	var groundHeight = $('#ground').position().top;
-//		
-//	window.setInterval(function(){
-//		
-//		bottom = thing.position().top + thing.height();	
-//		
-//		if(thing.queue().length === 0 && thing.position().top > 0 && grav === 0){
-//			thing.animate({bottom: "+=40px"}, (350/fallAccel) , 'linear',  function(){
-//				fallAccel++;
-//			});	
-//		}
-//		
-//		else if (thing.queue().length === 0 && bottom < groundHeight && grav === 1){
-//			thing.animate({bottom: "-=40px"}, (350/fallAccel) , 'linear',  function(){
-//				fallAccel++;
-//			});	
-//		}
-//		else if (thing.position().top <= 40 || bottom >= groundHeight){
-//			fallAccel = 1;
-//		}
-//		
-//
-//		
-//	}, 1);
-//}
-
 function Gravity(thing){
 	var fallAccel = 1;
 	var groundHeight;
