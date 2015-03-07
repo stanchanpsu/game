@@ -2,17 +2,23 @@ var animatequeue;
 var color = 0;
 var $body;
 var $game;
+var $ceiling;
+var $ground;
 var $blockman;
 var bottom;
 var grav = 1;
 
 $(document).ready(function(){
-	$blockman = $('#blockman');
 	$body = $('body');
 	$game = $('#game');
+	$ceiling = $('#ceiling');
+	$ground = $('#ground');
+	$blockman = $('#blockman');
+
+	//engine functions
 	slide($blockman, animatequeue);
 	jump($blockman, animatequeue);
-	changecolor($blockman);
+	changecolor();
 	generateblock();
 	scrollBackground();
 	
@@ -63,7 +69,7 @@ function jump(character, queue){
     });
 }
 
-function changecolor(character, queue){
+function changecolor(){
 	$(document).keyup(function(keypressed){
 		var key = keypressed.which;
 		if ( key == 39){
@@ -74,13 +80,20 @@ function changecolor(character, queue){
 		}
 		switch(color){
 			case 0:
-				character.animate({backgroundColor: '#11edff'}, {duration: 30, queue: false});
+				$blockman.animate({backgroundColor: '#11edff'}, {duration: 30, queue: false});
+				$ground.animate({backgroundColor: '#11edff'}, {duration: 30, queue: false});
+				$ceiling.animate({backgroundColor: '#11edff'}, {duration: 30, queue: false});
 				break;
 			case 1:
-				character.animate({backgroundColor: '#8e00ac'}, {duration: 30, queue: false});
+				$blockman.animate({backgroundColor: '#8e00ac'}, {duration: 30, queue: false});
+				$ground.animate({backgroundColor: '#8e00ac'}, {duration: 30, queue: false});
+				$ceiling.animate({backgroundColor: '#8e00ac'}, {duration: 30, queue: false});
+				
 				break;
 			case 2:
-				character.animate({backgroundColor: 'yellow'}, {duration: 30, queue: false});
+				$blockman.animate({backgroundColor: 'yellow'}, {duration: 30, queue: false});
+				$ground.animate({backgroundColor: 'yellow'}, {duration: 30, queue: false});
+				$ceiling.animate({backgroundColor: 'yellow'}, {duration: 30, queue: false});
 		}
 	});
 }
@@ -187,14 +200,18 @@ function ranColor(){
 
 function Gravity(thing){
 	var fallAccel = 1;
-	var groundHeight = $('#ground').position().top;
+	var groundHeight;
+	var ceilingHeight;
+	
 		
 	window.setInterval(function(){
 		
 		bottom = thing.position().top + thing.height();	
+		groundHeight = $ground.position().top;
+		ceilingHeight = $ceiling.position().top + $ceiling.height();
 		
-		if(thing.queue().length === 0 && thing.position().top > 0 && grav === 0){
-			thing.animate({top: 0}, 1.1*groundHeight , 'easeInQuad', function(){
+		if(thing.queue().length === 0 && thing.position().top > ceilingHeight && grav === 0){
+			thing.animate({top: ceilingHeight}, 1.1*groundHeight , 'easeInQuad', function(){
 			});	
 		}
 		
