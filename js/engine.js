@@ -4,9 +4,7 @@ var $body;
 var $game;
 var $blockman;
 var bottom;
-var grav = "down" ;
-
-//$.getScript("../game/js/toggle.js", function(){console.log("loaded toggle");});
+var grav = 1;
 
 $(document).ready(function(){
 	$blockman = $('#blockman');
@@ -18,14 +16,18 @@ $(document).ready(function(){
 	generateblock();
 	scrollBackground();
 	
+	$(document).keyup(function(keypressed){
+		if(keypressed.which === 32){
+			grav = (grav + 1) % 2;
+		}
+	});
 	
-//	$blockman.funcToggle('keyup', gravity($blockman), antiGravity($blockman));
-	
-	gravity($blockman);
+	Gravity($blockman);
 	
 	setInterval(function(){
 		$('div.obstacle').each(function(){
 			leftcollide($blockman, $(this));
+//			console.log($blockman.position().top);
 			
         });
 	}, 150);
@@ -155,58 +157,51 @@ function ranColor(){
 	}
 }
 
-function gravity(thing){
-	var fallAccel = 1;
-	var groundHeight = $('#ground').position().top;
-	window.setInterval(function(){
-		bottom = thing.position().top + thing.height();
-		if(thing.queue().length === 0 && bottom < groundHeight && gravity != "up" ){
-			thing.animate({bottom: "-=40px"}, (400/fallAccel) , 'linear',  function(){
-				fallAccel++;
-//				console.log(fallAccel);
-			});	
-		}
-		else if (bottom >= groundHeight){
-			fallAccel = 1;
-		}
-
-	}, 1);
-//			$(document).keyup(function(keypressed){
-//			if(keypressed.which === 32){
-//				grav = "up";
-//				antiGravity($blockman);
+//function Gravity(thing){
+//	var fallAccel = 1;
+//	var groundHeight = $('#ground').position().top;
+//		
+//	window.setInterval(function(){
+//		
+//		bottom = thing.position().top + thing.height();	
+//		
+//		if(thing.queue().length === 0 && thing.position().top > 0 && grav === 0){
+//			thing.animate({bottom: "+=40px"}, (350/fallAccel) , 'linear',  function(){
+//				fallAccel++;
+//			});	
 //		}
-//	});
-}
+//		
+//		else if (thing.queue().length === 0 && bottom < groundHeight && grav === 1){
+//			thing.animate({bottom: "-=40px"}, (350/fallAccel) , 'linear',  function(){
+//				fallAccel++;
+//			});	
+//		}
+//		else if (thing.position().top <= 40 || bottom >= groundHeight){
+//			fallAccel = 1;
+//		}
+//		
+//
+//		
+//	}, 1);
+//}
 
-function antiGravity(thing){
+function Gravity(thing){
 	var fallAccel = 1;
 	var groundHeight = $('#ground').position().top;
+		
 	window.setInterval(function(){
-		bottom = thing.position().top + thing.height();
-		if(thing.queue().length === 0 && thing.position().top > 0 && gravity != "down"){
-			thing.animate({bottom: "+=40px"}, (400/fallAccel) , 'linear',  function(){
-				fallAccel++;
-				console.log(fallAccel);
+		
+		bottom = thing.position().top + thing.height();	
+		
+		if(thing.queue().length === 0 && thing.position().top > 0 && grav === 0){
+			thing.animate({top: 0}, 1.1*groundHeight , 'easeInQuad', function(){
 			});	
 		}
-		else if (thing.position().top <= 0){
-			fallAccel = 1;
+		
+		else if (thing.queue().length === 0 && bottom < groundHeight && grav === 1){
+			thing.animate({top: groundHeight - thing.height()}, 1.1*groundHeight , 'easeInQuad', function(){
+			});	
 		}
 		
 	}, 1);
-//	$(document).keyup(function(keypressed){
-//			if(keypressed.which === 32){
-//				grav = "down";
-//				gravity($blockman);
-//			}
-//		});
 }
-
-//function switchGravity(){
-//	$(document).keyup(function(keypressed){
-//		if(keypressed.which === 32){
-//			gravity($blockman);
-//		}
-//	});
-//}
