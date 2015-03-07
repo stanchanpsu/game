@@ -19,7 +19,6 @@ $(document).ready(function(){
 	$blockman = $('#blockman');
 
 	//engine functions
-	slide($blockman, animatequeue);
 	jump();
 	changecolor();
 	generateblock();
@@ -35,27 +34,27 @@ $(document).ready(function(){
 	
 	setInterval(function(){
 		$('div.obstacle').each(function(){
-			leftcollide($blockman, $(this));
+			collide($blockman, $(this));
 //			console.log($blockman.position().top);
 			
         });
 	}, 150);
 });
-
-function slide(character, queue){
-	$(document).keyup(function(keypressed){
-		var key = keypressed.which;
-		if (key == 40 && !queue){
-			queue = true;
-			character.animate({width: '120px', height: '50px'}, 100).delay(500)
-				.animate({width: '100px', height: '100px'}, 100);
-			window.setTimeout(function(){queue = false;}, 800);
-		}
-		else if(queue){
-			return;
-		}
-	});
-}
+//
+//function slide(character, queue){
+//	$(document).keyup(function(keypressed){
+//		var key = keypressed.which;
+//		if (key == 40 && !queue){
+//			queue = true;
+//			character.animate({width: '120px', height: '50px'}, 100).delay(500)
+//				.animate({width: '100px', height: '100px'}, 100);
+//			window.setTimeout(function(){queue = false;}, 800);
+//		}
+//		else if(queue){
+//			return;
+//		}
+//	});
+//}
 
 function jump(){
     $(document).keyup(function(keypressed){
@@ -120,22 +119,34 @@ function changecolor(){
 
 function generateblock(){
     var ran;
+	var prob;
 	var blockid = 0;
     var $obstacle;
+	var $coin;
     
     setInterval(function(){
-		ran = Math.random();
-        if (ran < 0.33){
-			$obstacle = $("<div>", {id: "block" + blockid, class: "obstacle jumpblock"});
-            $game.append($obstacle.css('background-color', window.ranColor()));
+		
+		ran = Math.random();		
+		grav === 1 ? prob = 0.4 : prob = 0.6;		
+		
+        if (ran < prob){
+			$obstacle = $("<div>", {id: "upblock" + blockid, class: "obstacle"});
+            $game.append($obstacle.css({'background-color': window.ranColor(), 'top': '133px'}));
             $obstacle.css('right', '-200px').animate({right: '100vw'}, 3000, 'linear', function(){
                 $(this).remove();
             });
 		blockid++;
-        }
-        else if (0.67 > ran && ran > 0.33){
-			$obstacle = $("<div>", {id: "block" + blockid, class: "obstacle slideblock"});
-            $game.append($obstacle.css('background-color', window.ranColor()));
+			
+		$coin = $('<div>', {id: "coin" + blockid, class: "coin"});
+			$game.append($coin.css({'bottom': '133px'}));
+			$coin.css('right', '-200px').animate({right: '100vw'}, 3000, 'linear', function(){
+				$(this).remove();
+			});
+        }	
+		
+        if (ran > prob){
+			$obstacle = $("<div>", {id: "downblock" + blockid, class: "obstacle"});
+            $game.append($obstacle.css({'background-color': window.ranColor(), 'bottom': '133px'}));
             $obstacle.css('right', '-200px').animate({right: '100vw'}, 3000, 'linear', function(){
               $(this).remove();  
             });
@@ -147,7 +158,7 @@ function generateblock(){
     }, 700+Math.random()*1000);
 }
 
-function leftcollide(elem1, elem2){
+function collide(elem1, elem2){
     var pos1 = elem1.position();
     var pos2 = elem2.position();
     var width1 = elem1.width();
