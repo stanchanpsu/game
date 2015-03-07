@@ -1,4 +1,4 @@
-var animatequeue;
+var animatequeue = false;
 var color = 0;
 var $body;
 var $game;
@@ -7,6 +7,9 @@ var $ground;
 var $blockman;
 var bottom;
 var grav = 1;
+
+var groundHeight;
+var ceilingHeight;
 
 $(document).ready(function(){
 	$body = $('body');
@@ -17,7 +20,7 @@ $(document).ready(function(){
 
 	//engine functions
 	slide($blockman, animatequeue);
-	jump($blockman, animatequeue);
+	jump();
 	changecolor();
 	generateblock();
 	scrollBackground();
@@ -54,17 +57,34 @@ function slide(character, queue){
 	});
 }
 
-function jump(character, queue){
+function jump(){
     $(document).keyup(function(keypressed){
         var key = keypressed.which;
-        if (key == 38 && !queue){
-            queue = true;
-            character.animate({bottom: '+=200px', height: '110px', width: '80px'}, {duration: 200, ease: 'easeOutQuad'})
-//            .animate({bottom: '58px', height: '100px', width: '100px'}, 250);
-            window.setTimeout(function(){queue = false;}, 800);
+		
+        if (!animatequeue && key == 38 && grav === 1){
+            
+			animatequeue = true;
+			
+            $blockman.animate({top: '-=200px', height: '100px', width: '90px'}, {duration: 200, ease: 'easeOutQuad', complete: function(){
+				$blockman.animate({top: groundHeight - $blockman.height(), height: '100px', width: '100px'}, 0.8*groundHeight , 'easeInQuad', function(){
+					animatequeue = false;
+				});
+			}
+			});
+			
         }
-        else if(queue){
-            return;
+		
+		else if (!animatequeue && key == 38 && grav === 0){
+            
+			animatequeue = true;
+			
+            $blockman.animate({top: '+=200px', height: '100px', width: '90px'}, {duration: 200, ease: 'easeOutQuad', complete: function(){
+				$blockman.animate({top: ceilingHeight, height: '100px', width: '100px'}, 0.8*groundHeight , 'easeInQuad', function(){
+					animatequeue = false;
+				});
+			}
+			});
+			
         }
     });
 }
@@ -171,25 +191,19 @@ function ranColor(){
 }
 
 function Gravity(thing){
-	var fallAccel = 1;
-	var groundHeight;
-	var ceilingHeight;
-	
 		
 	window.setInterval(function(){
 		
-		bottom = thing.position().top + thing.height();	
+		blockbottom = thing.position().top + thing.height();	
 		groundHeight = $ground.position().top;
 		ceilingHeight = $ceiling.position().top + $ceiling.height();
 		
 		if(thing.queue().length === 0 && thing.position().top > ceilingHeight && grav === 0){
-			thing.animate({top: ceilingHeight}, 1.1*groundHeight , 'easeInQuad', function(){
-			});	
+			thing.animate({top: ceilingHeight}, 0.8*groundHeight , 'easeInQuad');	
 		}
 		
-		else if (thing.queue().length === 0 && bottom < groundHeight && grav === 1){
-			thing.animate({top: groundHeight - thing.height()}, 1.1*groundHeight , 'easeInQuad', function(){
-			});	
+		else if (thing.queue().length === 0 && blockbottom < groundHeight && grav === 1){
+			thing.animate({top: groundHeight - thing.height()}, 0.8*groundHeight , 'easeInQuad');
 		}
 		
 	}, 1);
