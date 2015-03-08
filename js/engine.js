@@ -13,6 +13,7 @@ var ceilingHeight;
 
 var topran;
 var bottomran;
+var coinran;
 var topprob;
 var bottomprob;
 var coinprob;
@@ -71,8 +72,8 @@ function jump(){
             
 			animatequeue = true;
 			
-            $blockman.animate({top: '-=300px', height: '100px', width: '90px'}, {duration: 200, ease: 'easeOutQuad', complete: function(){
-				$blockman.animate({top: groundHeight - $blockman.height(), height: '100px', width: '100px'}, 0.8*groundHeight , 'easeInQuad', function(){
+            $blockman.animate({top: '-=300px', height: '100px', width: '90px'}, {duration: 150, ease: 'easeOutQuad', complete: function(){
+				$blockman.animate({top: groundHeight - $blockman.height(), height: '100px', width: '100px'}, 0.6*groundHeight , 'easeInQuad', function(){
 					animatequeue = false;
 				});
 			}
@@ -84,8 +85,8 @@ function jump(){
             
 			animatequeue = true;
 			
-            $blockman.animate({top: '+=300px', height: '100px', width: '90px'}, {duration: 200, ease: 'easeOutQuad', complete: function(){
-				$blockman.animate({top: ceilingHeight, height: '100px', width: '100px'}, 0.8*groundHeight , 'easeInQuad', function(){
+            $blockman.animate({top: '+=300px', height: '100px', width: '90px'}, {duration: 150, ease: 'easeOutQuad', complete: function(){
+				$blockman.animate({top: ceilingHeight, height: '100px', width: '100px'}, 0.6*groundHeight , 'easeInQuad', function(){
 					animatequeue = false;
 				});
 			}
@@ -137,8 +138,8 @@ function genBlocks(){
 		
 		topran = Math.random();	
 		bottomran = Math.random();
-		coinprob = Math.random();
-		grav === 1 ? (topprob = 0.5, bottomprob = 0.65) : (topprob = 0.65, bottomprob = 0.5);		
+		coinran = Math.random();
+		grav === 1 ? (topprob = 0.5, bottomprob = 0.7, coinprob = 0.3) : (topprob = 0.7, bottomprob = 0.5, coinprob = 0.7);		
 		
 		//top obstacles
         if (topran < topprob){
@@ -152,7 +153,7 @@ function genBlocks(){
 		}
 		
 		//top coins
-		else if (topran > topprob && coinprob > 0.3){
+		else if (topran > topprob && coinran > coinprob){
 			
 			numcoin = window.ranInt(3,6);
 
@@ -167,7 +168,7 @@ function genBlocks(){
 			}
 		}
 
-	}, 800+Math.random()*1000);
+	}, 700+Math.random()*1000);
 	
 	//generate bottom items
 	setInterval(function(){
@@ -181,7 +182,7 @@ function genBlocks(){
             });
         }
 		
-		else if (bottomran > bottomprob && coinprob > 0.3){
+		else if (bottomran > bottomprob && coinran < coinprob){
 			
 			numcoin = window.ranInt(3,6);
 
@@ -196,7 +197,7 @@ function genBlocks(){
 			}
 		}
 
-    }, 800+Math.random()*1000);
+    }, 700+Math.random()*1000);
 }
 
 function collide(elem1, elem2){
