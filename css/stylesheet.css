@@ -12,7 +12,9 @@ body, html {padding: 0; margin: 0; overflow: hidden; min-width: 500px; }
 #ceiling {position: absolute; width: 100vw; height: 100px; top: 0px; background-color: #11edff}
 
 .obstacle {height:33px; width: 100px; border-radius: 3px; margin: 0px; position: absolute; }
+/*
 
 .coinrow {position: absolute; border: 2px orange solid; display: inline;}
+*/
 
 .coin { position: absolute; 0px; height: 33px; width: 33px; background-color: white;}

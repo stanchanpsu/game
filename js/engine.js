@@ -17,15 +17,12 @@ var topprob;
 var bottomprob;
 var coinprob;
 var blockid = 0;
-var coinrowid = 0;
 var coinid = 0;
 var $obstacle;
 var $coin;
-var $coinrow;
 var numcoin;
 
 //colors
-
 var yellow = '#f3ff11';
 var blue = '#11edff';
 var green = '#23ff11';
@@ -40,29 +37,30 @@ $(document).ready(function(){
 
 	//engine functions
 	jump();
-	changecolor();
-	generateblock();
-//	genCoin();
+	changeColor();
+	genBlocks();
 	
+	//switch gravity
 	$(document).keyup(function(keypressed){
 		if(keypressed.which === 32){
 			grav = (grav + 1) % 2;
 		}
-	});
-	
+	});	
 	Gravity($blockman);
 	
+	//check for collisions with obstacles
 	setInterval(function(){
 		$('div.obstacle').each(function(){
 			collide($blockman, $(this));			
         });
-//		console.log(grav);
-//		$('div.coin').each(function(){
-//			if ($(this).position().left <0){
-//				$(this).remove;
-//			}
-//		})
-	}, 150);
+	}, 200);
+	
+	//check for collisions with coins
+	setInterval(function(){  
+		$('div.coin').each(function(){
+			collide($blockman, $(this));
+		});
+	}, 50);
 });
 
 function jump(){
@@ -97,7 +95,7 @@ function jump(){
     });
 }
 
-function changecolor(){
+function changeColor(){
 	$(document).keyup(function(keypressed){
 		var key = keypressed.which;
 		if ( key == 39){
@@ -132,8 +130,9 @@ function changecolor(){
 	});
 }
 
-function generateblock(){
+function genBlocks(){
     
+	// generate top items
     setInterval(function(){
 		
 		topran = Math.random();	
@@ -141,7 +140,7 @@ function generateblock(){
 		coinprob = Math.random();
 		grav === 1 ? (topprob = 0.5, bottomprob = 0.65) : (topprob = 0.65, bottomprob = 0.5);		
 		
-		//generate top blocks
+		//top obstacles
         if (topran < topprob){
 			$obstacle = $("<div>", {id: "upblock" + blockid, class: "obstacle"});
             $game.append($obstacle.css({'background-color': window.ranColor(), 'top': '133px'}));
@@ -152,6 +151,7 @@ function generateblock(){
 			
 		}
 		
+		//top coins
 		else if (topran > topprob && coinprob > 0.3){
 			
 			numcoin = window.ranInt(3,6);
@@ -167,11 +167,12 @@ function generateblock(){
 			}
 		}
 
-	}, 400+Math.random()*1000);
+	}, 800+Math.random()*1000);
 	
+	//generate bottom items
 	setInterval(function(){
 		
-		//generate bottom blocks
+		//bottom obstacles
         if (bottomran < bottomprob){
 			$obstacle = $("<div>", {id: "downblock" + blockid, class: "obstacle"});
             $game.append($obstacle.css({'background-color': window.ranColor(), 'bottom': '133px'}));
@@ -179,26 +180,72 @@ function generateblock(){
               $(this).remove();  
             });
         }
-		else{
-			return;
+		
+		else if (bottomran > bottomprob && coinprob > 0.3){
+			
+			numcoin = window.ranInt(3,6);
+
+			for(i = 0; i < numcoin; i++){
+				$coin = $("<div>", {id: "coin" + coinid, class: "coin"});
+				$coin.css({'bottom': '133px', 'left': $('body').width() + 200 - i*66 + "px"}).appendTo($game).animate({left: 0 - i*66 + 'px'}, 3000, 'linear', function(){
+				$(this).remove();	
+				});
+				
+				coinid++;
+
+			}
 		}
 
-    }, 400+Math.random()*1000);
+    }, 800+Math.random()*1000);
 }
 
 function collide(elem1, elem2){
-    var pos1 = elem1.position();
-    var pos2 = elem2.position();
-    var width1 = elem1.width();
-    var width2 = elem2.width();
-    var height1 = elem1.height();
-    var height2 = elem2.height();
-    var bottomright1 = [pos1.left + width1, pos1.top + height1];
-    
-    
-    if (bottomright1[0] > pos2.left && bottomright1[1] > pos2.top && bottomright1[0] < pos2.left + width2 && elem1.css('background-color') != elem2.css('background-color')){
-		console.log("collision");
+	
+    var left1 = elem1.position().left;
+    var right1 = left1 + elem1.width();
+    var top1 = elem1.position().top;
+    var bottom1 = top1 + elem1.width();
+	var color1 = elem1.css('background-color');
+	
+	var left2 = elem2.position().left;
+    var right2 = left2 + elem2.width();
+    var top2 = elem2.position().top;
+    var bottom2 = top2 + elem2.width();
+	var color2 = elem2.css('background-color');
+   
+    if (grav === 1 
+		&& bottom1 > top2
+		&& top1 < top2
+		&& right1 > left2
+		&& color1 != color2){
+		
+		if ( elem2.attr('class') === 'coin'){
+			elem2.remove();
+//			console.log('money');
+		}
+		
+		else{
+//			console.log("collision");
+			elem2.remove();
+		}
     }
+	
+	else if (grav === 0 
+			 && top1 < bottom2
+			 && bottom1 > top2
+			 && right1 > left2
+			 && color1 != color2){
+		
+		if ( elem2.attr('class') === 'coin'){
+			elem2.remove();
+//			console.log('money');
+		}
+		
+		else{
+			elem2.remove();
+//			console.log("collision");
+		}
+	}
 }
 
 function ranInt(min, max) {
@@ -239,22 +286,3 @@ function Gravity(thing){
 		
 	}, 1);
 }
-
-String.prototype.repeat = function( num )
-{
-    return new Array( num + 1 ).join( this );
-}
-//
-//function howManyCoins(){
-//	
-//	numcoin = ranInt(3,6);
-//	var coinarray = [];
-//
-//	for (i = 0; i < numcoin; i++){
-//		$coin = $("<div>", {id: "coin" + coinid, class: "coin"});
-//		coinarray.push($coin);
-//		coinid++;
-//	}
-//	
-//	return(coinarray);
-//}
