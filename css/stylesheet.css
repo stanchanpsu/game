@@ -2,13 +2,13 @@ body, html {padding: 0; margin: 0; overflow: hidden !important; min-width: 500px
 
 #background { position: absolute; margin: 0; padding: 0; height: 100vh; width: 100vw; z-index: -999; background-color:black; background-size: 2000px 1000px; background-repeat: no-repeat; background-position: center;}
 
-#blockman {height:100px; width:100px; background-color: #11edff; margin:0px; 
+#blockman {height:100px; width:100px; background-color: #11edff; margin:0px;  padding: 0px;
     position:absolute; top: 50%; left:50px; border-radius:10px; }
 
-#ground {position: absolute; width: 100vw; height: 100px; bottom: 0px; background-color: #11edff}
+#ground {margin: 0px; padding: 0px; position: absolute; width: 100vw; height: 100px; bottom: 0px; background-color: #11edff}
 
-#ceiling {position: absolute; width: 100vw; height: 100px; top: 0px; background-color: #11edff}
+#ceiling {margin: 0px; padding: 0px; position: absolute; width: 100vw; height: 100px; top: 0px; background-color: #11edff}
 
 .obstacle {height:33px; width: 80px; border-radius: 3px; margin: 0px; position: absolute; }
 
-.coin { position: absolute; 0px; height: 33px; width: 33px; background-color: white;}
+.coin { position: absolute; margin: 0px; height: 33px; width: 33px; background-color: white;}
