@@ -260,7 +260,7 @@ function collide(elem1, elem2){
 		
 		if ( elem2.attr('class') === 'coin'){
 			elem2.remove();
-//			console.log('money');
+			console.log(grav);
 		}
 		
 		else{
