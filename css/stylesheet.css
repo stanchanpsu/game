@@ -1,7 +1,5 @@
 body, html {padding: 0; margin: 0; overflow: hidden !important; min-width: 500px; }
 
-/*#game {position: relative; }*/
-
 #background { position: absolute; margin: 0; padding: 0; height: 100vh; width: 100vw; z-index: -999; background-color:black; background-size: 2000px 1000px; background-repeat: no-repeat; background-position: center;}
 
 #blockman {height:100px; width:100px; background-color: #11edff; margin:0px; 

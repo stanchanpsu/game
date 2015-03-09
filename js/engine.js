@@ -29,12 +29,27 @@ var blue = '#11edff';
 var green = '#23ff11';
 var pink = '#e811ff';
 
+var ar=new Array(33,34,35,36,37,38,39,40);
+
+$(document).keydown(function(e) {
+     var key = e.which;
+      //console.log(key);
+      //if(key==35 || key == 36 || key == 37 || key == 39)
+      if($.inArray(key,ar) > -1) {
+          e.preventDefault();
+          return false;
+      }
+      return true;
+});
+
 $(document).ready(function(){
 	$body = $('body');
 	$game = $('#game');
 	$ceiling = $('#ceiling');
 	$ground = $('#ground');
 	$blockman = $('#blockman');
+	
+;
 
 	//engine functions
 	jump();
@@ -68,12 +83,17 @@ function jump(){
     $(document).keyup(function(keypressed){
         var key = keypressed.which;
 		
+		if (animatequeue){
+			return;
+		}
+		
         if (!animatequeue && key == 38 && grav === 1){
             
 			animatequeue = true;
 			
-            $blockman.animate({top: '-=300px', height: '100px', width: '90px'}, {duration: 150, ease: 'easeOutQuad', complete: function(){
-				$blockman.animate({top: groundHeight - $blockman.height(), height: '100px', width: '100px'}, 0.6*groundHeight , 'easeInQuad', function(){
+            $blockman.animate({top: '-=300px'}, {duration: 180, ease: 'easeOutQuad', complete: function(){
+				$blockman.animate({top: groundHeight - 100}, 0.6*groundHeight , 'easeInQuad', function(){
+					$(this).stop(true);
 					animatequeue = false;
 				});
 			}
@@ -85,8 +105,9 @@ function jump(){
             
 			animatequeue = true;
 			
-            $blockman.animate({top: '+=300px', height: '100px', width: '90px'}, {duration: 150, ease: 'easeOutQuad', complete: function(){
-				$blockman.animate({top: ceilingHeight, height: '100px', width: '100px'}, 0.6*groundHeight , 'easeInQuad', function(){
+            $blockman.animate({top: '+=300px'}, {duration: 180, ease: 'easeOutQuad', complete: function(){
+				$blockman.animate({top: ceilingHeight}, 0.6*groundHeight , 'easeInQuad', function(){
+					$(this).stop(true);
 					animatequeue = false;
 				});
 			}
@@ -278,11 +299,11 @@ function Gravity(thing){
 		ceilingHeight = $ceiling.position().top + $ceiling.height();
 		
 		if(thing.queue().length === 0 && thing.position().top > ceilingHeight && grav === 0){
-			thing.animate({top: ceilingHeight}, 0.8*groundHeight , 'easeInQuad');	
+			thing.animate({top: ceilingHeight}, 0.6*groundHeight , 'easeInQuad');	
 		}
 		
 		else if (thing.queue().length === 0 && blockbottom < groundHeight && grav === 1){
-			thing.animate({top: groundHeight - thing.height()}, 0.8*groundHeight , 'easeInQuad');
+			thing.animate({top: groundHeight - thing.height()}, 0.6*groundHeight , 'easeInQuad');
 		}
 		
 	}, 1);
