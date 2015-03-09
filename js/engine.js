@@ -69,7 +69,7 @@ $(document).ready(function(){
 		$('div.obstacle').each(function(){
 			collide($blockman, $(this));			
         });
-	}, 200);
+	}, 50);
 	
 	//check for collisions with coins
 	setInterval(function(){  
@@ -91,7 +91,7 @@ function jump(){
             
 			animatequeue = true;
 			
-            $blockman.animate({top: '-=300px'}, {duration: 180, ease: 'easeOutQuad', complete: function(){
+            $blockman.animate({top: '-=120px'}, {duration: 120, ease: 'easeOutQuart', complete: function(){
 				$blockman.animate({top: groundHeight - 100}, 0.6*groundHeight , 'easeInQuad', function(){
 					$(this).stop(true);
 					animatequeue = false;
@@ -105,7 +105,7 @@ function jump(){
             
 			animatequeue = true;
 			
-            $blockman.animate({top: '+=300px'}, {duration: 180, ease: 'easeOutQuad', complete: function(){
+            $blockman.animate({top: '+=120px'}, {duration: 120, ease: 'easeOutQuart', complete: function(){
 				$blockman.animate({top: ceilingHeight}, 0.6*groundHeight , 'easeInQuad', function(){
 					$(this).stop(true);
 					animatequeue = false;
@@ -189,7 +189,7 @@ function genBlocks(){
 			}
 		}
 
-	}, 700+Math.random()*1000);
+	}, 600+Math.random()*1000);
 	
 	//generate bottom items
 	setInterval(function(){
@@ -218,7 +218,7 @@ function genBlocks(){
 			}
 		}
 
-    }, 700+Math.random()*1000);
+    }, 600+Math.random()*1000);
 }
 
 function collide(elem1, elem2){
@@ -254,7 +254,7 @@ function collide(elem1, elem2){
 	
 	else if (grav === 0 
 			 && top1 < bottom2
-			 && bottom1 > top2
+			 && bottom1 > bottom2
 			 && right1 > left2
 			 && color1 != color2){
 		
