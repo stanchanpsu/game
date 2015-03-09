@@ -1,15 +1,15 @@
 var animatequeue = false;
 var color = 0;
-var $body;
+// var $body;
 var $game;
 var $ceiling;
 var $ground;
 var $blockman;
-var bottom;
 var grav = 1;
 
 var groundHeight;
 var ceilingHeight;
+var blockbottom;
 
 var topran;
 var bottomran;
@@ -43,13 +43,11 @@ $(document).keydown(function(e) {
 });
 
 $(document).ready(function(){
-	$body = $('body');
+	// $body = $('body');
 	$game = $('#game');
 	$ceiling = $('#ceiling');
 	$ground = $('#ground');
 	$blockman = $('#blockman');
-	
-;
 
 	//engine functions
 	jump();
@@ -178,7 +176,7 @@ function genBlocks(){
 			
 			numcoin = window.ranInt(3,6);
 
-			for(i = 0; i < numcoin; i++){
+			for(var i = 0; i < numcoin; i++){
 				$coin = $("<div>", {id: "coin" + coinid, class: "coin"});
 				$coin.css({'top': '133px', 'left': $('body').width() + 200 - i*66 + "px"}).appendTo($game).animate({left: 0 - i*66 + 'px'}, 3000, 'linear', function(){
 				$(this).remove();	
@@ -207,7 +205,7 @@ function genBlocks(){
 			
 			numcoin = window.ranInt(3,6);
 
-			for(i = 0; i < numcoin; i++){
+			for(var i = 0; i < numcoin; i++){
 				$coin = $("<div>", {id: "coin" + coinid, class: "coin"});
 				$coin.css({'bottom': '133px', 'left': $('body').width() + 200 - i*66 + "px"}).appendTo($game).animate({left: 0 - i*66 + 'px'}, 3000, 'linear', function(){
 				$(this).remove();	
@@ -226,13 +224,13 @@ function collide(elem1, elem2){
     var left1 = elem1.position().left;
     var right1 = left1 + elem1.width();
     var top1 = elem1.position().top;
-    var bottom1 = top1 + elem1.width();
+    var bottom1 = top1 + elem1.height();
 	var color1 = elem1.css('background-color');
 	
 	var left2 = elem2.position().left;
-    var right2 = left2 + elem2.width();
+    // var right2 = left2 + elem2.width();
     var top2 = elem2.position().top;
-    var bottom2 = top2 + elem2.width();
+    var bottom2 = top2 + elem2.height();
 	var color2 = elem2.css('background-color');
    
     if (grav === 1 
@@ -252,7 +250,7 @@ function collide(elem1, elem2){
 		}
     }
 	
-	else if (grav === 0 
+	if (grav === 0 
 			 && top1 < bottom2
 			 && bottom1 > bottom2
 			 && right1 > left2
