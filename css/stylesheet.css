@@ -1,4 +1,7 @@
-body, html {padding: 0; margin: 0; overflow: hidden !important; min-width: 500px; }
+
+body, html {padding: 0; margin: 0; overflow: hidden !important; min-width: 500px; font-family: 'Open Sans', sans-serif; }
+
+/*#game {display: table; position: absolute; height: 100%; width: 100%;}*/
 
 #background { position: absolute; margin: 0; padding: 0; height: 100vh; width: 100vw; z-index: -999; background-color:black; background-size: 2000px 1000px; background-repeat: no-repeat; background-position: center;}
 
@@ -12,3 +15,7 @@ body, html {padding: 0; margin: 0; overflow: hidden !important; min-width: 500px
 .obstacle {height:33px; width: 80px; border-radius: 3px; margin: 0px; position: absolute; }
 
 .coin { position: absolute; margin: 0px; height: 33px; width: 33px; background-color: white;}
+
+#counter{  margin: auto; margin-right: 100px;
+  position: absolute;
+  top: 0; left: 0; bottom: 0; right: 0; padding: 0px; width: 400px; height: 200px; color: #11edff; font-size: 150px; border: 0px; text-align: right;}

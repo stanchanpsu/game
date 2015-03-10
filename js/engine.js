@@ -1,11 +1,14 @@
 var animatequeue = false;
 var color = 0;
-// var $body;
+var coincount =0;
+var counter;
 var $game;
 var $ceiling;
 var $ground;
 var $blockman;
+var $counter;
 var grav = 1;
+var difficulty = 0;
 
 var groundHeight;
 var ceilingHeight;
@@ -22,6 +25,7 @@ var coinid = 0;
 var $obstacle;
 var $coin;
 var numcoin;
+var coin =0;
 
 //colors
 var yellow = '#f3ff11';
@@ -43,11 +47,11 @@ $(document).keydown(function(e) {
 });
 
 $(document).ready(function(){
-	// $body = $('body');
 	$game = $('#game');
 	$ceiling = $('#ceiling');
 	$ground = $('#ground');
 	$blockman = $('#blockman');
+	$counter = $('#counter');
 
 	//engine functions
 	jump();
@@ -74,7 +78,16 @@ $(document).ready(function(){
 		$('div.coin').each(function(){
 			collide($blockman, $(this));
 		});
+	counter = new countUp("counter", coincount, coincount, 0, 10, {useGrouping: true, separator: ',',});
+	counter.start();
 	}, 50);
+	
+	setInterval(function(){
+		if (difficulty <= 900){
+		difficulty+=5;
+		console.log(difficulty);
+	}
+	},10);
 });
 
 function jump(){
@@ -90,7 +103,7 @@ function jump(){
 			animatequeue = true;
 			
             $blockman.animate({top: '-=120px'}, {duration: 120, ease: 'easeOutQuart', complete: function(){
-				$blockman.animate({top: groundHeight - 100}, 0.6*groundHeight , 'easeInQuad', function(){
+				$blockman.delay(100).animate({top: groundHeight - 100}, 0.6*groundHeight , 'easeInQuad', function(){
 					$(this).stop(true);
 					animatequeue = false;
 				});
@@ -104,7 +117,7 @@ function jump(){
 			animatequeue = true;
 			
             $blockman.animate({top: '+=120px'}, {duration: 120, ease: 'easeOutQuart', complete: function(){
-				$blockman.animate({top: ceilingHeight}, 0.6*groundHeight , 'easeInQuad', function(){
+				$blockman.delay(100).animate({top: ceilingHeight}, 0.6*groundHeight , 'easeInQuad', function(){
 					$(this).stop(true);
 					animatequeue = false;
 				});
@@ -129,22 +142,26 @@ function changeColor(){
 				$blockman.animate({backgroundColor: blue}, {duration: 30, queue: false});
 				$ground.animate({backgroundColor: blue}, {duration: 30, queue: false});
 				$ceiling.animate({backgroundColor: blue}, {duration: 30, queue: false});
+				$counter.animate({color: blue}, {duration: 30, queue: false});
 				break;
 			case 1:
 				$blockman.animate({backgroundColor: pink}, {duration: 30, queue: false});
 				$ground.animate({backgroundColor: pink}, {duration: 30, queue: false});
 				$ceiling.animate({backgroundColor: pink}, {duration: 30, queue: false});
+				$counter.animate({color: pink}, {duration: 30, queue: false});
 				
 				break;
 			case 2:
 				$blockman.animate({backgroundColor: yellow}, {duration: 30, queue: false});
 				$ground.animate({backgroundColor: yellow}, {duration: 30, queue: false});
 				$ceiling.animate({backgroundColor: yellow}, {duration: 30, queue: false});
+				$counter.animate({color: yellow}, {duration: 30, queue: false});
 				break;
 			case 3:
 				$blockman.animate({backgroundColor: green}, {duration: 30, queue: false});
 				$ground.animate({backgroundColor: green}, {duration: 30, queue: false});
 				$ceiling.animate({backgroundColor: green}, {duration: 30, queue: false});
+				$counter.animate({color: green}, {duration: 30, queue: false});
 				break;
 		}
 	});
@@ -158,7 +175,7 @@ function genBlocks(){
 		topran = Math.random();	
 		bottomran = Math.random();
 		coinran = Math.random();
-		grav === 1 ? (topprob = 0.5, bottomprob = 0.7, coinprob = 0.3) : (topprob = 0.7, bottomprob = 0.5, coinprob = 0.7);		
+		grav === 1 ? (topprob = 0.5, bottomprob = 0.7, coinprob = 0.2) : (topprob = 0.7, bottomprob = 0.5, coinprob = 0.8);		
 		
 		//top obstacles
         if (topran < topprob){
@@ -187,7 +204,7 @@ function genBlocks(){
 			}
 		}
 
-	}, 600+Math.random()*1000);
+	}, 1000 - difficulty);
 	
 	//generate bottom items
 	setInterval(function(){
@@ -216,7 +233,7 @@ function genBlocks(){
 			}
 		}
 
-    }, 600+Math.random()*1000);
+    }, 1000 - difficulty);
 }
 
 function collide(elem1, elem2){
@@ -241,11 +258,10 @@ function collide(elem1, elem2){
 		
 		if ( elem2.attr('class') === 'coin'){
 			elem2.remove();
-//			console.log('money');
+			coincount++;
 		}
 		
 		else{
-//			console.log("collision");
 			elem2.remove();
 		}
     }
@@ -258,12 +274,11 @@ function collide(elem1, elem2){
 		
 		if ( elem2.attr('class') === 'coin'){
 			elem2.remove();
-			console.log(grav);
+			coincount++;
 		}
 		
 		else{
 			elem2.remove();
-//			console.log("collision");
 		}
 	}
 }
