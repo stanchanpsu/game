@@ -25,7 +25,7 @@ var coinid = 0;
 var $obstacle;
 var $coin;
 var numcoin;
-var coin =0;
+var coin = 0;
 
 //colors
 var yellow = '#f3ff11';
